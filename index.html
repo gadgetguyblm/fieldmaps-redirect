@@ -27,37 +27,24 @@
       margin: 10px;
     }
     #post-install {
-      display: none;
-      margin-top: 20px;
       color: #b00;
+      margin-bottom: 20px;
+    }
+    #install-button {
+      background-color: #0078d4;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #install-button:hover {
+      background-color: #005a9e;
     }
   </style>
-  <script type="text/javascript">
-    function redirect() {
-      // Attempt to open Field Maps and download MMPK
-      window.location = "https://fieldmaps.arcgis.app/?referenceContext=open&itemID=bbcf61c2f8e746fcbf0bfd8b09f99d6c&anonymousAccess=true";
-
-      // After 2 seconds, check if user does not have Field Maps
-      setTimeout(function () {
-        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-        if (/android/i.test(userAgent)) {
-          // Android fallback → Google Play
-          window.location = "https://play.google.com/store/apps/details?id=com.esri.fieldmaps";
-          document.getElementById("post-install").style.display = "block";
-        } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-          // iOS fallback → App Store
-          window.location = "https://apps.apple.com/app/esri-field-maps/id1515671684";
-          document.getElementById("post-install").style.display = "block";
-        } else {
-          // Desktop or unknown device → Show manual links
-          document.getElementById("manual-links").style.display = "block";
-        }
-      }, 2000);
-    }
-  </script>
 </head>
-<body onload="redirect()">
+<body>
 
   <!-- Organization Logo -->
   <img src="https://www.esri.com/content/dam/esrisites/en-us/common/logos/esri-logo-black.png" 
@@ -67,9 +54,12 @@
   <p>If the app does not open automatically, please install Field Maps below.</p>
 
   <!-- Post-install instruction -->
-  <p id="post-install">
-    After installing Field Maps, please scan this QR code again to download the map.
+  <p id="post-install" style="display:none;">
+    Field Maps is not installed. After installing, please scan this QR code again to download the map.
   </p>
+
+  <!-- Install button -->
+  <button id="install-button" style="display:none;">Install Field Maps</button>
 
   <!-- Manual fallback for desktop -->
   <div id="manual-links" style="display:none;">
@@ -83,6 +73,42 @@
       </a>
     </div>
   </div>
+
+  <script>
+    function redirect() {
+      // Attempt to auto-download MMPK if Field Maps is installed
+      window.location = "https://fieldmaps.arcgis.app/?referenceContext=open&itemID=bbcf61c2f8e746fcbf0bfd8b09f99d6c&anonymousAccess=true";
+
+      // Detect if Field Maps is not installed
+      setTimeout(function () {
+        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+        if (/android/i.test(userAgent)) {
+          // Android fallback → show install message + button
+          document.getElementById("post-install").style.display = "block";
+          var btn = document.getElementById("install-button");
+          btn.style.display = "inline-block";
+          btn.onclick = function() {
+            window.location = "https://play.google.com/store/apps/details?id=com.esri.fieldmaps";
+          };
+        } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+          // iOS fallback → show install message + button
+          document.getElementById("post-install").style.display = "block";
+          var btn = document.getElementById("install-button");
+          btn.style.display = "inline-block";
+          btn.onclick = function() {
+            window.location = "https://apps.apple.com/app/esri-field-maps/id1515671684";
+          };
+        } else {
+          // Desktop / unknown device → show manual download links
+          document.getElementById("manual-links").style.display = "block";
+        }
+      }, 2000);
+    }
+
+    // Run redirect on page load
+    window.onload = redirect;
+  </script>
 
 </body>
 </html>
