@@ -26,6 +26,7 @@
       color: #b00;
       font-weight: bold;
       margin-bottom: 20px;
+      font-size: 16px;
     }
     #install-button {
       background-color: #0078d4;
@@ -42,6 +43,9 @@
     }
     #qr-code {
       margin-top: 20px;
+      width: 400px;
+      height: 400px;
+      display: inline-block;
     }
     .store-links img {
       height: 50px;
@@ -61,7 +65,8 @@
   <!-- Instruction always visible -->
   <p id="instruction">
     If Field Maps is not installed, tap the button below to install it.<br>
-    After installing, please scan this QR code again to download the map.
+    After installing Field Maps, please scan this QR code again to download the map.<br>
+    Users with Field Maps already installed will download the map automatically.
   </p>
 
   <!-- Install button (mobile only) -->
@@ -87,9 +92,9 @@
     // Your working MMPK deep link
     const fieldMapsLink = "https://fieldmaps.arcgis.app/?referenceContext=open&itemID=bbcf61c2f8e746fcbf0bfd8b09f99d6c&anonymousAccess=true";
 
-    // Generate QR code
+    // Generate QR code (large)
     const qrContainer = document.getElementById("qr-code");
-    QRCode.toCanvas(qrContainer, fieldMapsLink, { width: 200 }, function (error) {
+    QRCode.toCanvas(qrContainer, fieldMapsLink, { width: 400 }, function (error) {
       if (error) console.error(error);
     });
 
