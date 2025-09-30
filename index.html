@@ -53,3 +53,36 @@
           // Desktop or unknown device → Show manual links
           document.getElementById("manual-links").style.display = "block";
         }
+      }, 2000);
+    }
+  </script>
+</head>
+<body onload="redirect()">
+
+  <!-- Organization Logo -->
+  <img src="https://www.esri.com/content/dam/esrisites/en-us/common/logos/esri-logo-black.png" 
+       alt="Organization Logo" class="logo">
+
+  <h2>Opening ArcGIS Field Maps…</h2>
+  <p>If the app does not open automatically, please install Field Maps below.</p>
+
+  <!-- Post-install instruction -->
+  <p id="post-install">
+    After installing Field Maps, please scan this QR code again to download the map.
+  </p>
+
+  <!-- Manual fallback for desktop -->
+  <div id="manual-links" style="display:none;">
+    <p><strong>Download Field Maps:</strong></p>
+    <div class="store-links">
+      <a href="https://apps.apple.com/app/esri-field-maps/id1515671684" target="_blank">
+        <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store">
+      </a>
+      <a href="https://play.google.com/store/apps/details?id=com.esri.fieldmaps" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play">
+      </a>
+    </div>
+  </div>
+
+</body>
+</html>
