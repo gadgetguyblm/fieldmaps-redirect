@@ -26,53 +26,30 @@
       height: 50px;
       margin: 10px;
     }
+    #post-install {
+      display: none;
+      margin-top: 20px;
+      color: #b00;
+    }
   </style>
   <script type="text/javascript">
     function redirect() {
-      // Deep link to Field Maps with your MMPK item ID
-     window.location = "https://fieldmaps.arcgis.app?referenceContext=item&itemID=bbcf61c2f8e746fcbf0bfd8b09f99d6c";
+      // Attempt to open Field Maps and download MMPK
+      window.location = "https://fieldmaps.arcgis.app/?referenceContext=open&itemID=bbcf61c2f8e746fcbf0bfd8b09f99d6c&anonymousAccess=true";
 
-      // If app is not installed, fallback after 2 seconds
+      // After 2 seconds, check if user does not have Field Maps
       setTimeout(function () {
         var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
         if (/android/i.test(userAgent)) {
           // Android fallback → Google Play
           window.location = "https://play.google.com/store/apps/details?id=com.esri.fieldmaps";
+          document.getElementById("post-install").style.display = "block";
         } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
           // iOS fallback → App Store
           window.location = "https://apps.apple.com/app/esri-field-maps/id1515671684";
+          document.getElementById("post-install").style.display = "block";
         } else {
-          // Desktop or unknown device → Show message only
+          // Desktop or unknown device → Show manual links
           document.getElementById("manual-links").style.display = "block";
         }
-      }, 2000);
-    }
-  </script>
-</head>
-<body onload="redirect()">
-
-  <!-- Replace with your org logo -->
-  <img src="https://farmington.utah.gov/wp-content/uploads/2023/06/City_horiz_2-color-1.png" 
-       alt="Organization Logo" class="logo">
-
-  <h2>Opening in ArcGIS Field Maps…</h2>
-  <p>If the app does not open automatically, please install Field Maps below.</p>
-
-  <!-- Manual fallback for desktop users -->
-  <div id="manual-links" style="display:none;">
-    <p><strong>Download Field Maps:</strong></p>
-    <div class="store-links">
-      <a href="https://apps.apple.com/app/esri-field-maps/id1515671684" target="_blank">
-        <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store">
-      </a>
-      <a href="https://play.google.com/store/apps/details?id=com.esri.fieldmaps" target="_blank">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play">
-      </a>
-    </div>
-  </div>
-
-</body>
-</html>
-
-
