@@ -22,10 +22,6 @@
       color: #555;
       margin-bottom: 20px;
     }
-    .store-links img {
-      height: 50px;
-      margin: 10px;
-    }
     #instruction {
       color: #b00;
       font-weight: bold;
@@ -44,7 +40,15 @@
     #install-button:hover {
       background-color: #005a9e;
     }
+    #qr-code {
+      margin-top: 20px;
+    }
+    .store-links img {
+      height: 50px;
+      margin: 10px;
+    }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 </head>
 <body>
 
@@ -57,11 +61,14 @@
   <!-- Instruction always visible -->
   <p id="instruction">
     If Field Maps is not installed, tap the button below to install it.<br>
-    After installing, please scan the QR code again to download the map.
+    After installing, please scan this QR code again to download the map.
   </p>
 
   <!-- Install button (mobile only) -->
   <button id="install-button" style="display:none;">Install Field Maps</button>
+
+  <!-- QR code -->
+  <div id="qr-code"></div>
 
   <!-- Manual fallback for desktop -->
   <div id="manual-links" style="display:none;">
@@ -71,4 +78,48 @@
         <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store">
       </a>
       <a href="https://play.google.com/store/apps/details?id=com.esri.fieldmaps" target="_blank">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.s
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play">
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Your working MMPK deep link
+    const fieldMapsLink = "https://fieldmaps.arcgis.app/?referenceContext=open&itemID=bbcf61c2f8e746fcbf0bfd8b09f99d6c&anonymousAccess=true";
+
+    // Generate QR code
+    const qrContainer = document.getElementById("qr-code");
+    QRCode.toCanvas(qrContainer, fieldMapsLink, { width: 200 }, function (error) {
+      if (error) console.error(error);
+    });
+
+    function redirect() {
+      // Attempt auto-download if Field Maps is installed
+      window.location = fieldMapsLink;
+
+      // Detect device type to show install button / manual links
+      var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+      if (/android/i.test(userAgent)) {
+        var btn = document.getElementById("install-button");
+        btn.style.display = "inline-block";
+        btn.onclick = function() {
+          window.location = "https://play.google.com/store/apps/details?id=com.esri.fieldmaps";
+        };
+      } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        var btn = document.getElementById("install-button");
+        btn.style.display = "inline-block";
+        btn.onclick = function() {
+          window.location = "https://apps.apple.com/app/esri-field-maps/id1515671684";
+        };
+      } else {
+        // Desktop / unknown devices
+        document.getElementById("manual-links").style.display = "block";
+      }
+    }
+
+    window.onload = redirect;
+  </script>
+
+</body>
+</html>
